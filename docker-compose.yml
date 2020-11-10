@@ -5,8 +5,10 @@ services:
     build: .
     ports:
       - "3333:3333"
+    command: sh ./docker-start.sh
     volumes:
-      - .:/code
+      - .:/home/app
+      - /home/app/node_modules
     depends_on: 
       - db
   
@@ -14,10 +16,9 @@ services:
     image: postgres
     ports: 
       - "5432:5432"
-    volumes:
-      - dbdata:/var/lib/postgres/data 
-    environment: 
-      POSTGRES_HOST_AUTH_METHOD: "trust"
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
       
 volumes:
   dbdata:
