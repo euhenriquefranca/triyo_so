@@ -44,12 +44,3 @@ workflows:
     jobs:
     - node/test
   version: 2
-
-# Original config.yml file:
-# version: 2.1
-# orbs:
-#   node: circleci/node@3.0.0
-# workflows:
-#   node-tests:
-#     jobs:
-#       - node/test
