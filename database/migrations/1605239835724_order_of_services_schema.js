@@ -7,12 +7,22 @@ class OrderOfServicesSchema extends Schema {
   up () {
     this.create('order_of_services', (table) => {
       table.increments()
+      
       table
         .integer('user_id')
         .unsigned()
         .notNullable()
         .references('id')
         .inTable('users')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+
+      table
+        .integer('client_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('clients')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
