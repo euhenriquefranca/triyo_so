@@ -22,12 +22,12 @@ class OrderOfServiceController {
    * @param {View} ctx.view
    */
   async index () {
-    const ordersOfServices = await OrderOfService.all()
+    const order_of_sevice = await OrderOfService.all()
     
-    return ordersOfServices
+    return order_of_sevice
   }
 
-  /**
+  /**s
    * Create/save a new orderofservice.
    * POST orderofservices
    *
@@ -39,6 +39,7 @@ class OrderOfServiceController {
 
     const data = request.only(
       [
+        'client_id',
         'os_number',
         'reason_called',
         'message',
@@ -84,12 +85,11 @@ class OrderOfServiceController {
    * @param {Response} ctx.response
    */
   async update ({ params, request }) {
-    await Database.transaction( async trx => {
+
       const order_of_sevice = await OrderOfService.findOrFail(params.id)
 
       const data = request.only(
         [
-          'os_number',
           'reason_called',
           'message',
           'place_of_performance',
@@ -100,10 +100,9 @@ class OrderOfServiceController {
 
       order_of_sevice.merge(data)
 
-      await order_of_sevice.save(trx)
+      await order_of_sevice.save()
 
       return order_of_sevice
-    })
   }
 
   /**
