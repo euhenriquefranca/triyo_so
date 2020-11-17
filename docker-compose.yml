@@ -19,6 +19,3 @@ services:
     environment:
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
-      
-volumes:
-  dbdata:
