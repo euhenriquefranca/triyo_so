@@ -1,0 +1,15 @@
+service: triyo_so
+runtime: nodejs10
+
+instance_class: F2
+
+
+env_variables:
+  NODE_ENV: "development"
+  APP_KEY: "mFlq9x9xu51NNXFsT5qgf0X7hCf0L1uj"
+  DB_HOST: "35.198.16.13"
+  DB_USER: "postgres"
+  DB_PASSWORD: "triyo-so-db-development"
+  DB_DATABASE: "triyo-so-db-development"
+beta_settings:
+  cloud_sql_instances: "triyo-development:southamerica-east1:triyo-so-db-development"
