@@ -1,4 +1,4 @@
-service: triyo_so
+service: triyo-so
 runtime: nodejs10
 
 instance_class: F2
