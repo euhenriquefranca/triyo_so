@@ -1,5 +1,9 @@
 'use strict'
 
+const Response = require('@adonisjs/framework/src/Response')
+
+const OrderOfService = use('App/Models/OrderOfService')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -17,22 +21,13 @@ class OrderOfServiceController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index () {
+    const order_of_sevice = await OrderOfService.all()
+    
+    return order_of_sevice
   }
 
-  /**
-   * Render a form to be used for creating a new orderofservice.
-   * GET orderofservices/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
+  /**s
    * Create/save a new orderofservice.
    * POST orderofservices
    *
@@ -40,7 +35,29 @@ class OrderOfServiceController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, auth}) {
+
+    const data = request.only(
+      [
+        'client_id',
+        'os_number',
+        'reason_called',
+        'message',
+        'place_of_performance',
+        'start_date_os',
+        'end_date_os'
+      ]
+    )
+    
+    const order_of_sevice = await OrderOfService.create(
+      {
+        user_id: auth.user.id,
+        ...data
+      }
+    )
+
+
+    return order_of_sevice
   }
 
   /**
@@ -52,20 +69,12 @@ class OrderOfServiceController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params }) {
+    const order_of_sevice = await OrderOfService.findOrFail(params.id)
+
+    return order_of_sevice
   }
 
-  /**
-   * Render a form to update an existing orderofservice.
-   * GET orderofservices/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
 
   /**
    * Update orderofservice details.
@@ -75,7 +84,25 @@ class OrderOfServiceController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+
+      const order_of_sevice = await OrderOfService.findOrFail(params.id)
+
+      const data = request.only(
+        [
+          'reason_called',
+          'message',
+          'place_of_performance',
+          'start_date_os',
+          'end_date_os'
+        ]
+      )
+
+      order_of_sevice.merge(data)
+
+      await order_of_sevice.save()
+
+      return order_of_sevice
   }
 
   /**
@@ -86,7 +113,15 @@ class OrderOfServiceController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, auth, response }) {
+    const order_of_sevice = await OrderOfService.findOrFail(params.id)
+
+    if (order_of_sevice.user_id != auth.user.id) {
+      return response.status(401)
+    }
+
+
+    await order_of_sevice.delete()
   }
 }
 

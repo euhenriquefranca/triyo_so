@@ -18,3 +18,7 @@ const Route = use('Route')
 
 Route.post('/register', 'AuthController.register')
 Route.post('/authenticate', 'AuthController.authenticate')
+
+Route.group(() => {
+  Route.resource('order_of_services', 'OrderOfServiceController').apiOnly()
+}).middleware('auth')
