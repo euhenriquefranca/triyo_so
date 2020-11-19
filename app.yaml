@@ -3,6 +3,10 @@ runtime: nodejs10
 
 instance_class: F2
 
+error_handlers:
+  - file: default_error.html
+  - error_code: over_quota
+    file: over_quota.html
 
 env_variables:
   NODE_ENV: "development"
