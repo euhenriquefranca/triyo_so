@@ -24,5 +24,5 @@ Route.group(() => {
 }).middleware('auth')
 
 Route.group(() => {
-  Route.resource('clients', 'ClientController')
+  Route.resource('clients', 'ClientController').apiOnly()
 }).middleware('auth')

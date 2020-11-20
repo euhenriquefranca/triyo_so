@@ -23,14 +23,12 @@ class ClientController {
   async index ({ auth, response }) {
     const clients = await Client.all()
 
-    
     const user = await User.find(auth.user.id)
     if (!user)
       return response.status(401).send({message: 'User not authorized'})
 
     return clients
   }
-
 
   /**
    * Create/save a new client.
