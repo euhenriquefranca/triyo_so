@@ -56,7 +56,6 @@ class OrderOfServiceController {
       }
     )
 
-
     return order_of_sevice
   }
 
@@ -86,23 +85,21 @@ class OrderOfServiceController {
    */
   async update ({ params, request }) {
 
-      const order_of_sevice = await OrderOfService.findOrFail(params.id)
+    const order_of_sevice = await OrderOfService.findOrFail(params.id)
 
-      const data = request.only(
-        [
-          'reason_called',
-          'message',
-          'place_of_performance',
-          'start_date_os',
-          'end_date_os'
-        ]
-      )
+    const data = request.only(
+      [
+        'reason_called',
+        'message',
+        'place_of_performance',
+        'start_date_os',
+        'end_date_os'
+      ]
+    )
 
-      order_of_sevice.merge(data)
-
-      await order_of_sevice.save()
-
-      return order_of_sevice
+    order_of_sevice.merge(data)
+    await order_of_sevice.save()
+    return order_of_sevice
   }
 
   /**
@@ -119,7 +116,6 @@ class OrderOfServiceController {
     if (order_of_sevice.user_id != auth.user.id) {
       return response.status(401)
     }
-
 
     await order_of_sevice.delete()
   }
