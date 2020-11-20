@@ -1,5 +1,8 @@
 'use strict'
 
+const Client = use('App/Models/Client')
+const User = use('App/Models/User')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -17,20 +20,17 @@ class ClientController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ auth, response }) {
+    const clients = await Client.all()
+
+    
+    const user = await User.find(auth.user.id)
+    if (!user)
+      return response.status(401).send({message: 'User not authorized'})
+
+    return clients
   }
 
-  /**
-   * Render a form to be used for creating a new client.
-   * GET clients/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
 
   /**
    * Create/save a new client.
@@ -40,7 +40,30 @@ class ClientController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, auth, response }) {
+    
+    const data = request.only(
+      [
+        'client_name',
+        'cnpj',
+        'document',
+        'type_client',
+        'email',
+        'phone'
+      ]
+    )
+      
+    const user = await User.find(auth.user.id)
+    if (!user)
+      return response.status(401).send({message: 'User not authorized'})
+
+    const client = await Client.create(
+      {
+        ...data
+      }
+    )
+
+    return client
   }
 
   /**
@@ -52,19 +75,13 @@ class ClientController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
+  async show ({ params, response }) {
+    const client = await Client.find(params.id)
 
-  /**
-   * Render a form to update an existing client.
-   * GET clients/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+    if (!client)
+      return response.status(404).send({message: 'Client not found'})
+
+    return client
   }
 
   /**
@@ -75,7 +92,24 @@ class ClientController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+
+    const client = await Client.findOrFail(params.id)
+
+    const data = request.only(
+      [
+        'client_name',
+        'cnpj',
+        'document',
+        'type_client',
+        'email',
+        'phone'
+      ]
+    )
+
+    client.merge(data)
+    await client.save()
+    return client
   }
 
   /**
@@ -86,7 +120,16 @@ class ClientController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, auth, response }) {
+
+    const user = await User.find(auth.user.id)
+
+    if (!user)
+      return response.status(401).send({message: 'User not authorized'})
+    
+    const client = await Client.findOrFail(params.id)
+
+    await client.delete()
   }
 }
 

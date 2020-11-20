@@ -22,3 +22,7 @@ Route.post('/authenticate', 'AuthController.authenticate')
 Route.group(() => {
   Route.resource('order_of_services', 'OrderOfServiceController').apiOnly()
 }).middleware('auth')
+
+Route.group(() => {
+  Route.resource('clients', 'ClientController')
+}).middleware('auth')
