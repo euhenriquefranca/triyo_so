@@ -17,9 +17,7 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return ({
-    message: 'Welcome to Triyo SO'
-  })
+  return ({message: 'Welcome to Triyo SO'})
 })
 
 Route.post('/register', 'AuthController.register')
