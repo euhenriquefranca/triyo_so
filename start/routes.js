@@ -17,5 +17,16 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return ({message: 'Welcome to Triyo SO'})
 })
+
+Route.post('/register', 'AuthController.register')
+Route.post('/authenticate', 'AuthController.authenticate')
+
+Route.group(() => {
+  Route.resource('order_of_services', 'OrderOfServiceController').apiOnly()
+}).middleware('auth')
+
+Route.group(() => {
+  Route.resource('clients', 'ClientController').apiOnly()
+}).middleware('auth')
