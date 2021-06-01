@@ -20,7 +20,7 @@ module.exports = {
   origin: function (currentOrigin) {
     return [
       "http://localhost:3000",
-      "https://nextjs-mzw-qt1ngi3sh-euhenriquefranca.vercel.app/",
+      "https://nextjs-mzw-qt1ngi3sh-euhenriquefranca.vercel.app",
     ].includes(currentOrigin);
   },
 
